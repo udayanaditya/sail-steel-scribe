@@ -12,77 +12,16 @@ const Inventory = () => {
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
 
-  // Sample inventory data
-  const inventoryData = [
-    {
-      id: 'ST001',
-      name: 'Hot Rolled Coils',
-      category: 'Hot Rolled Products',
-      quantity: 250,
-      unit: 'Tonnes',
-      location: 'Warehouse A-1',
-      status: 'In Stock',
-      lastUpdated: '2024-06-15'
-    },
-    {
-      id: 'ST002',
-      name: 'Cold Rolled Sheets',
-      category: 'Cold Rolled Products',
-      quantity: 180,
-      unit: 'Tonnes',
-      location: 'Warehouse B-2',
-      status: 'In Stock',
-      lastUpdated: '2024-06-14'
-    },
-    {
-      id: 'ST003',
-      name: 'Galvanized Coils',
-      category: 'Coated Products',
-      quantity: 15,
-      unit: 'Tonnes',
-      location: 'Warehouse C-1',
-      status: 'Low Stock',
-      lastUpdated: '2024-06-13'
-    },
-    {
-      id: 'ST004',
-      name: 'Stainless Steel Plates',
-      category: 'Stainless Steel',
-      quantity: 95,
-      unit: 'Tonnes',
-      location: 'Warehouse D-1',
-      status: 'In Stock',
-      lastUpdated: '2024-06-12'
-    },
-    {
-      id: 'ST005',
-      name: 'Wire Rods',
-      category: 'Wire Products',
-      quantity: 0,
-      unit: 'Tonnes',
-      location: 'Warehouse E-1',
-      status: 'Out of Stock',
-      lastUpdated: '2024-06-10'
-    },
-    {
-      id: 'ST006',
-      name: 'Rail Sections',
-      category: 'Rail Products',
-      quantity: 320,
-      unit: 'Tonnes',
-      location: 'Warehouse F-1',
-      status: 'In Stock',
-      lastUpdated: '2024-06-16'
-    }
-  ];
+  // Empty inventory data
+  const inventoryData: any[] = [];
 
-  const categories = ['all', ...new Set(inventoryData.map(item => item.category))];
+  const categories = ['all'];
   const statuses = ['all', 'In Stock', 'Low Stock', 'Out of Stock'];
 
   const filteredData = useMemo(() => {
     return inventoryData.filter(item => {
-      const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          item.id.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          item.id?.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = filterCategory === 'all' || item.category === filterCategory;
       const matchesStatus = filterStatus === 'all' || item.status === filterStatus;
       
@@ -221,12 +160,10 @@ const Inventory = () => {
                   </tbody>
                 </table>
                 
-                {filteredData.length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
-                    <Package className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                    <p>No items found matching your search criteria.</p>
-                  </div>
-                )}
+                <div className="text-center py-8 text-gray-500">
+                  <Package className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                  <p>No inventory items available. Add items using the Add/Delete Items page.</p>
+                </div>
               </div>
             </CardContent>
           </Card>
