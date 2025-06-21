@@ -9,9 +9,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Trash2, Package, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useInventory } from '@/contexts/InventoryContext';
 
 const Manage = () => {
   const { toast } = useToast();
+  const { items: existingItems, addItem, removeItem } = useInventory();
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -20,34 +22,6 @@ const Manage = () => {
     location: '',
     description: ''
   });
-
-  // Sample existing items for deletion
-  const [existingItems, setExistingItems] = useState([
-    {
-      id: 'ST001',
-      name: 'Hot Rolled Coils',
-      category: 'Hot Rolled Products',
-      quantity: 250,
-      unit: 'Tonnes',
-      location: 'Warehouse A-1'
-    },
-    {
-      id: 'ST002',
-      name: 'Cold Rolled Sheets',
-      category: 'Cold Rolled Products',
-      quantity: 180,
-      unit: 'Tonnes',
-      location: 'Warehouse B-2'
-    },
-    {
-      id: 'ST003',
-      name: 'Galvanized Coils',
-      category: 'Coated Products',
-      quantity: 15,
-      unit: 'Tonnes',
-      location: 'Warehouse C-1'
-    }
-  ]);
 
   const categories = [
     'Hot Rolled Products',
@@ -61,7 +35,7 @@ const Manage = () => {
   ];
 
   const units = ['Tonnes', 'Kg', 'Pieces', 'Meters', 'Sheets'];
-  const locations = ['Warehouse A-1', 'Warehouse B-2', 'Warehouse C-1', 'Warehouse D-1', 'Warehouse E-1', 'Warehouse F-1'];
+  const locations = ['Warehouse 1', 'Warehouse 2', 'Warehouse 3', 'Warehouse 4', 'Warehouse 5', 'Warehouse 6'];
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -80,8 +54,14 @@ const Manage = () => {
       return;
     }
 
-    // In a real app, this would make an API call
-    console.log('Adding item:', formData);
+    addItem({
+      name: formData.name,
+      category: formData.category,
+      quantity: parseInt(formData.quantity),
+      unit: formData.unit,
+      location: formData.location,
+      description: formData.description
+    });
     
     toast({
       title: "Item Added Successfully",
@@ -100,7 +80,7 @@ const Manage = () => {
   };
 
   const handleDeleteItem = (id: string, name: string) => {
-    setExistingItems(prev => prev.filter(item => item.id !== id));
+    removeItem(id);
     
     toast({
       title: "Item Deleted",

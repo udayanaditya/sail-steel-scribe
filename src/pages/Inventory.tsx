@@ -6,16 +6,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, Filter, Package, AlertTriangle, CheckCircle } from 'lucide-react';
+import { useInventory } from '@/contexts/InventoryContext';
 
 const Inventory = () => {
+  const { items: inventoryData } = useInventory();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
 
-  // Empty inventory data
-  const inventoryData: any[] = [];
-
-  const categories = ['all'];
+  const categories = ['all', ...Array.from(new Set(inventoryData.map(item => item.category)))];
   const statuses = ['all', 'In Stock', 'Low Stock', 'Out of Stock'];
 
   const filteredData = useMemo(() => {
@@ -27,7 +26,7 @@ const Inventory = () => {
       
       return matchesSearch && matchesCategory && matchesStatus;
     });
-  }, [searchTerm, filterCategory, filterStatus]);
+  }, [inventoryData, searchTerm, filterCategory, filterStatus]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -49,6 +48,12 @@ const Inventory = () => {
       'Out of Stock': 'destructive'
     };
     return variants[status as keyof typeof variants] || 'default';
+  };
+
+  const resetFilters = () => {
+    setSearchTerm('');
+    setFilterCategory('all');
+    setFilterStatus('all');
   };
 
   return (
@@ -106,7 +111,7 @@ const Inventory = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Button variant="outline" className="gap-2">
+            <Button variant="outline" className="gap-2" onClick={resetFilters}>
               <Filter className="h-4 w-4" />
               Reset
             </Button>
@@ -136,34 +141,38 @@ const Inventory = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredData.map((item) => (
-                      <tr key={item.id} className="border-b hover:bg-gray-50">
-                        <td className="py-3 px-4 font-mono text-sm">{item.id}</td>
-                        <td className="py-3 px-4 font-medium">{item.name}</td>
-                        <td className="py-3 px-4 text-sm text-gray-600">{item.category}</td>
-                        <td className="py-3 px-4">
-                          <span className="font-semibold">{item.quantity}</span>
-                          <span className="text-sm text-gray-500 ml-1">{item.unit}</span>
+                    {filteredData.length > 0 ? (
+                      filteredData.map((item) => (
+                        <tr key={item.id} className="border-b hover:bg-gray-50">
+                          <td className="py-3 px-4 font-mono text-sm">{item.id}</td>
+                          <td className="py-3 px-4 font-medium">{item.name}</td>
+                          <td className="py-3 px-4 text-sm text-gray-600">{item.category}</td>
+                          <td className="py-3 px-4">
+                            <span className="font-semibold">{item.quantity}</span>
+                            <span className="text-sm text-gray-500 ml-1">{item.unit}</span>
+                          </td>
+                          <td className="py-3 px-4 text-sm text-gray-600">{item.location}</td>
+                          <td className="py-3 px-4">
+                            <div className="flex items-center gap-2">
+                              {getStatusIcon(item.status)}
+                              <Badge variant={getStatusBadge(item.status) as any}>
+                                {item.status}
+                              </Badge>
+                            </div>
+                          </td>
+                          <td className="py-3 px-4 text-sm text-gray-500">{item.lastUpdated}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={7} className="text-center py-8 text-gray-500">
+                          <Package className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                          <p>No inventory items found matching your criteria.</p>
                         </td>
-                        <td className="py-3 px-4 text-sm text-gray-600">{item.location}</td>
-                        <td className="py-3 px-4">
-                          <div className="flex items-center gap-2">
-                            {getStatusIcon(item.status)}
-                            <Badge variant={getStatusBadge(item.status) as any}>
-                              {item.status}
-                            </Badge>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-sm text-gray-500">{item.lastUpdated}</td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
-                
-                <div className="text-center py-8 text-gray-500">
-                  <Package className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                  <p>No inventory items available. Add items using the Add/Delete Items page.</p>
-                </div>
               </div>
             </CardContent>
           </Card>
