@@ -24,11 +24,13 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 sail-gradient rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">S</span>
-              </div>
-              <span className="text-xl font-bold text-gray-900">SAIL</span>
+            <Link to="/" className="flex items-center space-x-3">
+              <img 
+                src="/lovable-uploads/69736512-3024-46d5-b638-b1010f80c547.png" 
+                alt="SAIL Logo" 
+                className="h-10 w-auto"
+              />
+              <span className="text-xl font-bold text-gray-900 font-devanagari">सेल SAIL</span>
             </Link>
           </div>
 

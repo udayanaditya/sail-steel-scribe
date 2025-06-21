@@ -32,11 +32,11 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center steel-bg">
+      <section className="relative min-h-screen flex items-center justify-center steel-plant-bg">
         <div className="absolute inset-0 hero-overlay"></div>
         <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 font-devanagari">
               Steel Authority of India Limited
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-blue-100">
